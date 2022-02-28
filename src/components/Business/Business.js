@@ -4,16 +4,16 @@ import "./Business.css";
 function Business(props) {
     return(
         <div className="Business">
-            <div className="image-container">
-                <a href={props.business.url} target='_blank'>
-                    <img src={props.business.imageSrc} alt=''/>
-                </a>
-            </div>
+            <a href={props.business.url} target='_blank' rel="noopener noreferrer">
+                <div className="image-container">
+                        <img src={props.business.imageSrc} alt=''/>
+                </div>
             <h2>{props.business.name}</h2>
+            </a>
             <div className="Business-information">
                 <a 
                 href={`https://www.google.com/maps/?q=${props.business.coordinates.latitude},${props.business.coordinates.longitude}`} 
-                target='_blank'>
+                target='_blank' rel="noopener noreferrer">
                     <div className="Business-address">
                         <p>{props.business.address}</p>
                         <p>{props.business.city}</p>

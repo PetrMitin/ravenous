@@ -68,7 +68,7 @@ function SearchBar(props) {
             onKeyPress={handleEnter} />
         </div>
         <div onClick={handleSearch} className="SearchBar-submit">
-            <a>Let's Go</a>
+            <button className="search-button">Let's go</button>
         </div>
     </div>
     );
