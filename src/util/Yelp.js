@@ -1,16 +1,15 @@
-const apiKey = 'gqII128WSYCIYxmYw59mcEftRByKUsmac1WfRwUikX_gh22Gdix7k-u00HbDJ5ce4hFjDb1FaAC_c8zFS9vQz_RYM1zy9QvWPjSHmNh-b2z_Kyh_8F_akzQBPYcTXnYx';
-
 const Yelp = {
-    searchYelp(term, location, sortBy) {
-        return fetch(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${term}&location=${location}&sort_by=${sortBy}`, {
-            headers: {
-                Authorization: `Bearer ${apiKey}`,
-            },
-        }).then((response) => {
-            return response.json();
-        }).then((jsonResponse) => {
-            if (jsonResponse.businesses) {
-                return jsonResponse.businesses.map(((business) => {
+    async searchYelp(term, location, sortBy) {
+        try {
+            const response = await fetch(`https://thingproxy.freeboard.io/fetch/https://api.yelp.com/v3/businesses/search?term=${term}&location=${location}&sort_by=${sortBy}`, {
+                headers: {
+                    'Authorization': `Bearer ${process.env.REACT_APP_API_KEY}`,
+                    'Access-Control-Allow-Origin': '*'
+                },
+            })
+            const jsonRes = await response.json();
+            if (jsonRes.businesses) {
+                return jsonRes.businesses.map((business => {
                     return {
                         id: business.id,
                         imageSrc: business.image_url,
@@ -27,7 +26,14 @@ const Yelp = {
                     };
                 }));
             }
-        })
+            else {
+                throw new Error(jsonRes.error.description || 'Unexpected error! Please refresh page!')
+            }
+        } catch (e) {
+            console.log(e)
+            alert(e.message)
+            return []
+        }
     }
 }
 

@@ -1,35 +1,33 @@
 import React from "react";
 import "./Business.css";
 
-class Business extends React.Component {
-    render() {
-        return(
-            <div className="Business">
-                <div className="image-container">
-                    <a href={this.props.business.url} target='_blank'>
-                        <img src={this.props.business.imageSrc} alt=''/>
-                    </a>
-                </div>
-                <h2>{this.props.business.name}</h2>
-                <div className="Business-information">
-                    <a 
-                    href={`https://www.google.com/maps/?q=${this.props.business.coordinates.latitude},${this.props.business.coordinates.longitude}`} 
-                    target='_blank'>
-                        <div className="Business-address">
-                            <p>{this.props.business.address}</p>
-                            <p>{this.props.business.city}</p>
-                            <p>{this.props.business.state} {this.props.business.zipCode}</p>
-                        </div>
-                    </a>
-                    <div className="Business-reviews">
-                        <h3>{this.props.business.category}</h3>
-                        <h3 className="rating">{this.props.business.rating}</h3>
-                        <p>{this.props.business.reviewCount}</p>
+function Business(props) {
+    return(
+        <div className="Business">
+            <div className="image-container">
+                <a href={props.business.url} target='_blank'>
+                    <img src={props.business.imageSrc} alt=''/>
+                </a>
+            </div>
+            <h2>{props.business.name}</h2>
+            <div className="Business-information">
+                <a 
+                href={`https://www.google.com/maps/?q=${props.business.coordinates.latitude},${props.business.coordinates.longitude}`} 
+                target='_blank'>
+                    <div className="Business-address">
+                        <p>{props.business.address}</p>
+                        <p>{props.business.city}</p>
+                        <p>{props.business.state} {props.business.zipCode}</p>
                     </div>
+                </a>
+                <div className="Business-reviews">
+                    <h3>{props.business.category}</h3>
+                    <h3 className="rating">{props.business.rating}</h3>
+                    <p>{props.business.reviewCount}</p>
                 </div>
-        </div>
-        );
-    }
+            </div>
+    </div>
+    );
 }
 
 export default Business

@@ -1,91 +1,77 @@
-import React from "react";
+import React, {useState} from "react";
 import "./SearchBar.css";
 
- class SearchBar extends React.Component {
-     constructor(props) {
-         super(props);
+function SearchBar(props) {
+    const [term, setTerm] = useState('restaurant')
+    const [location, setLocation] = useState('USA')
+    const [sortBy, setSortBy] = useState('best_match')
 
-         this.state = {
-             term: 'restaurant',
-             location: 'USA',
-             sortBy: 'best_match'
-         }
+    const sortByOptions = {
+        'Best Match': 'best_match',
+        'Highest Rated': 'rating',
+        'Most Reviewed': 'review_count'
+    }
+    
+    const getSortByClass = sortByOption => { 
+        return sortBy === sortByOption ? 'active' : '';
+    }
 
-         this.sortByOptions = {
-            'Best Match': 'best_match',
-            'Highest Rated': 'rating',
-            'Most Reviewed': 'review_count'
-         }
-        
-         this.handleTermChange = this.handleTermChange.bind(this);
-         this.handleLocationChange = this.handleLocationChange.bind(this);
-         this.handleSearch = this.handleSearch.bind(this);
-         this.handleSortByChange = this.handleSortByChange.bind(this);
-         this.handleEnter = this.handleEnter.bind(this);
-     }
+    const handleSortByChange = sortByOption => {
+    setSortBy(sortByOption);
+    }
 
-     getSortByClass(sortByOption) { 
-         return this.state.sortBy === sortByOption ? 'active' : '';
-     }
+    const handleTermChange = e => {
+    setTerm(e.target.value);
+    }
 
-     handleSortByChange(sortByOption) {
-        this.setState({sortBy: sortByOption});
-     }
+    const handleLocationChange = e => {
+    setLocation(e.target.value);
+    }
 
-     handleTermChange(e) {
-        this.setState({term: e.target.value});
-     }
+    const handleSearch = e => {
+    props.searchYelp(term, location, sortBy);
+    e.preventDefault();
+    }
 
-     handleLocationChange(e) {
-        this.setState({location: e.target.value});
-     }
+    const handleEnter = e => {
+    e.key === 'Enter' && props.searchYelp(term, location, sortBy);
+    }
 
-     handleSearch(e) {
-        this.props.searchYelp(this.state.term, this.state.location, this.state.sortBy);
-        e.preventDefault();
-     }
+    const renderSortByOptions = () => {
+        return Object.keys(sortByOptions).map(sortByOption => {
+            let sortByOptionValue = sortByOptions[sortByOption];
+            return(
+                <li 
+                key={sortByOptionValue} 
+                className={getSortByClass(sortByOptionValue)}
+                onClick={() => {handleSortByChange(sortByOptionValue)}}>{sortByOption}</li>
+            );
+        });
+    }
 
-     handleEnter(e) {
-        e.key === 'Enter' && this.props.searchYelp(this.state.term, this.state.location, this.state.sortBy);
-      }
-
-     renderSortByOptions() {
-         return Object.keys(this.sortByOptions).map(sortByOption => {
-             let sortByOptionValue = this.sortByOptions[sortByOption];
-             return(
-                 <li 
-                 key={sortByOptionValue} 
-                 className={this.getSortByClass(sortByOptionValue)}
-                 onClick={this.handleSortByChange.bind(this, sortByOptionValue)}>{sortByOption}</li>
-             );
-         });
-     }
-
-     render() {
-         return(
-            <div className="SearchBar">
-                <div className="SearchBar-sort-options">
-                    <ul>
-                        {this.renderSortByOptions()}
-                    </ul>
-                </div>
-                <div className="SearchBar-fields">
-                    <input 
-                    placeholder="Search Businesses (restaurants by default)" 
-                    onChange={this.handleTermChange} 
-                    onKeyPress={this.handleEnter} />
-                    
-                    <input 
-                    placeholder="Where? (USA by default)" 
-                    onChange={this.handleLocationChange} 
-                    onKeyPress={this.handleEnter} />
-                </div>
-                <div onClick={this.handleSearch} className="SearchBar-submit">
-                    <a>Let's Go</a>
-                </div>
-          </div>
-         );
-     }
+    return(
+    <div className="SearchBar">
+        <div className="SearchBar-sort-options">
+            <ul>
+                {renderSortByOptions()}
+            </ul>
+        </div>
+        <div className="SearchBar-fields">
+            <input 
+            placeholder="Search Businesses (restaurants by default)" 
+            onChange={handleTermChange} 
+            onKeyPress={handleEnter} />
+            
+            <input 
+            placeholder="Where? (USA by default)" 
+            onChange={handleLocationChange} 
+            onKeyPress={handleEnter} />
+        </div>
+        <div onClick={handleSearch} className="SearchBar-submit">
+            <a>Let's Go</a>
+        </div>
+    </div>
+    );
  }
 
  export default SearchBar;
